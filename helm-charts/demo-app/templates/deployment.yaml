@@ -1,23 +1,31 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  name: demo-app
+  name: {{ include "demo-app.fullname" . }}
   labels:
-    app: demo-app
+    app: {{ include "demo-app.name" . }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
   selector:
-    matchLabels:
-      app: demo-app
-  template:
-    metadata:
-      labels:
-        app: demo-app
-    spec:
-      containers:
-        - name: demo-app
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - containerPort: {{ .Values.service.port }}
+    app: {{ include "demo-app.name" . }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "demo-app.fullname" . }}
+  labels:
+    app: {{ include "demo-app.name" . }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ include "demo-app.name" . }}
 

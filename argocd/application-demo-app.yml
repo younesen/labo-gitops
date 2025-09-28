@@ -6,13 +6,14 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/younesen/paiement-service.git' # remplace par ton repo
-    targetRevision: HEAD
-    path: demo-app
+    repoURL: https://github.com/younesen/labo-gitops.git
+    targetRevision: main
+    path: helm-charts/demo-app
   destination:
-    server: 'https://kubernetes.default.svc'
-    namespace: dev
+    server: https://kubernetes.default.svc
+    namespace: demo
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
