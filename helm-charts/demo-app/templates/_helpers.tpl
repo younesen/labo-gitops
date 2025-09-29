@@ -5,3 +5,4 @@
 {{- define "demo-app.fullname" -}}
 {{ .Release.Name }}-{{ .Chart.Name }}
 {{- end }}
+
