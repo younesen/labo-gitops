@@ -11,6 +11,7 @@ spec:
     path: helm-charts/demo-app
     helm:
       valueFiles:
+        - values.yaml
         - values-prod.yaml
   destination:
     server: https://kubernetes.default.svc
@@ -19,3 +20,4 @@ spec:
     automated:
       prune: true
       selfHeal: true
+

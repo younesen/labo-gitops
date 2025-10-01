@@ -1,7 +1,12 @@
 replicaCount: 4
+
 image:
   repository: nginx
   tag: stable
+
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 80
+
+fullnameOverride: demo-app-prod
+
