@@ -1,9 +1,8 @@
 replicaCount: 2
-
 image:
   repository: nginx
-  tag: latest
-
+  tag: staging
 service:
   type: ClusterIP
-  port: 8080
+  port: 80
+
