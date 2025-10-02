@@ -1,19 +1,35 @@
 apiVersion: argoproj.io/v1alpha1
-kind: Application
+kind: ApplicationSet
 metadata:
-  name: demo-app
+  name: demo-app-applicationset
   namespace: argocd
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/younesen/labo-gitops.git
-    targetRevision: main
-    path: helm-charts/demo-app
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: demo
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+  generators:
+    - list:
+        elements:
+          - name: dev
+            namespace: demo-dev
+            valuesFile: values-dev.yaml
+          - name: prod
+            namespace: demo-prod
+            valuesFile: values-prod.yaml
+  template:
+    metadata:
+      name: demo-app-{{name}}
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/younesen/labo-gitops.git
+        targetRevision: main
+        path: helm-charts/demo-app
+        helm:
+          valueFiles:
+            - {{valuesFile}}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: {{namespace}}
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
 
