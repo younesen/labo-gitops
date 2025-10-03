@@ -5,34 +5,33 @@ metadata:
   namespace: argocd
 spec:
   generators:
-    - list:
-        elements:
-          - name: dev
-            namespace: demo-dev
-            values: values-dev.yaml
-          - name: prod
-            namespace: demo-prod
-            values: values-prod.yaml
-          - name: staging
-            namespace: demo-staging
-            values: values-staging.yaml
+  - list:
+      elements:
+      - name: dev
+        namespace: demo-dev
+        values: values-dev.yaml
+      - name: staging
+        namespace: demo-staging
+        values: values-staging.yaml
+      - name: prod
+        namespace: demo-prod
+        values: values-prod.yaml
   template:
     metadata:
-      name: demo-app-{{name}}
+      name: 'demo-app-{{name}}'
     spec:
       project: default
       source:
-        repoURL: https://github.com/younesen/labo-gitops.git
+        repoURL: 'https://github.com/younesen/labo-gitops.git'
         targetRevision: main
         path: helm-charts/demo-app
         helm:
           valueFiles:
-            - "{{.values}}"
+          - '{{values}}'
       destination:
-        server: https://kubernetes.default.svc
-        namespace: "{{.namespace}}"
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'
       syncPolicy:
         automated:
           prune: true
           selfHeal: true
-
