@@ -1,0 +1,11 @@
+- import_playbook: create-namespace.yml
+- import_playbook: setup-secrets.yml
+- import_playbook: install-ingress.yml
+- import_playbook: setup-monitoring.yml
+- import_playbook: setup-argocd.yml
+- import_playbook: deploy-demo-pod.yml
+- import_playbook: setup-cert-manager.yml
+- import_playbook: setup-external-dns.yml
+- import_playbook: setup-logging.yml
+- import_playbook: setup-autoscaling.yml
+- import_playbook: setup-backups.yml

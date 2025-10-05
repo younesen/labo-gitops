@@ -1,21 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: demo-app-applicationset
-  namespace: argocd
+  name: demo-app
 spec:
   generators:
-  - list:
-      elements:
-      - name: dev
-        namespace: demo-dev
-        values: values-dev.yaml
-      - name: staging
-        namespace: demo-staging
-        values: values-staging.yaml
-      - name: prod
-        namespace: demo-prod
-        values: values-prod.yaml
+    - list:
+        elements:
+          - name: dev
+            namespace: demo-dev
+            valueFile: values-dev.yaml
+          - name: staging
+            namespace: demo-staging
+            valueFile: values-staging.yaml
+          - name: prod
+            namespace: demo-prod
+            valueFile: values-prod.yaml
   template:
     metadata:
       name: 'demo-app-{{name}}'
@@ -27,7 +26,7 @@ spec:
         path: helm-charts/demo-app
         helm:
           valueFiles:
-          - '{{values}}'
+            - '{{valueFile}}'
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: '{{namespace}}'
@@ -35,3 +34,4 @@ spec:
         automated:
           prune: true
           selfHeal: true
+

@@ -1,18 +1,28 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Deploy nginx pod in 'dev' namespace
+    - name: Deploy demo nginx pod
       kubernetes.core.k8s:
         state: present
         definition:
-          apiVersion: v1
-          kind: Pod
+          apiVersion: apps/v1
+          kind: Deployment
           metadata:
             name: demo-nginx
-            namespace: dev
+            namespace: demo-dev
           spec:
-            containers:
-              - name: nginx
-                image: nginx:latest
-                ports:
-                  - containerPort: 80
+            replicas: 1
+            selector:
+              matchLabels:
+                app: demo-nginx
+            template:
+              metadata:
+                labels:
+                  app: demo-nginx
+              spec:
+                containers:
+                  - name: nginx
+                    image: nginx:latest
+                    ports:
+                      - containerPort: 80
+

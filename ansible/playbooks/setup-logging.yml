@@ -1,0 +1,25 @@
+---
+- name: Setup Loki and Grafana for logging
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Create logging namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: logging
+        state: present
+
+    - name: Deploy Loki via Helm
+      kubernetes.core.helm:
+        name: loki
+        chart_ref: grafana/loki-stack
+        release_namespace: logging
+        values:
+          grafana:
+            enabled: true
+            persistence:
+              enabled: false
+          promtail:
+            enabled: true

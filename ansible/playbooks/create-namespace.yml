@@ -1,11 +1,17 @@
 - hosts: localhost
   gather_facts: false
   tasks:
-    - name: Create namespace 'dev'
+    - name: Create namespaces
       kubernetes.core.k8s:
         state: present
         definition:
           apiVersion: v1
           kind: Namespace
           metadata:
-            name: dev
+            name: "{{ item }}"
+      loop:
+        - demo-dev
+        - demo-prod
+        - demo-staging
+        - monitoring
+

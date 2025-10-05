@@ -1,0 +1,24 @@
+---
+- name: Setup ExternalDNS to manage DNS records automatically
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Create namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: external-dns
+        state: present
+
+    - name: Deploy ExternalDNS using Helm
+      kubernetes.core.helm:
+        name: external-dns
+        chart_ref: bitnami/external-dns
+        release_namespace: external-dns
+        create_namespace: false
+        values:
+          provider: google  # ou aws/azure selon ton infra
+          domainFilters:
+            - example.com
+          txtOwnerId: k8s

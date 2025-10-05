@@ -1,0 +1,33 @@
+---
+- name: Setup autoscaling in the cluster
+  hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Install metrics-server
+      kubernetes.core.k8s:
+        state: present
+        src: https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+    - name: Create Horizontal Pod Autoscaler for demo app
+      kubernetes.core.k8s:
+        definition:
+          apiVersion: autoscaling/v2
+          kind: HorizontalPodAutoscaler
+          metadata:
+            name: demo-app-hpa
+            namespace: demo-prod
+          spec:
+            scaleTargetRef:
+              apiVersion: apps/v1
+              kind: Deployment
+              name: demo-app
+            minReplicas: 2
+            maxReplicas: 5
+            metrics:
+              - type: Resource
+                resource:
+                  name: cpu
+                  target:
+                    type: Utilization
+                    averageUtilization: 60
